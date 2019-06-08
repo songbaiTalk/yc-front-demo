@@ -9,6 +9,7 @@ import {DatePicker, Select, Form, Row, Col, Button, notification} from 'antd';
 import Table from './components/Table';
 import getInfoTable from './services/getInfoTable';
 import addPartner from './services/addPartner';
+import makeMeeting from './services/makeMeeting';
 
 const {Option} = Select;
 const {Item} = Form;
@@ -141,18 +142,12 @@ class APP extends React.Component {
         if (role.includes('合伙人')) {
             data[role].forEach((item, index) => {
                 if (item.other !== dataSource[index][role].isFree) {
-                    timeArr.push(dataSource[index].time);
+                    timeArr.push([month, day, dataSource[index].time]);
                 }
             });
             let pushData = {
-                month,
-                day,
-                player: '',
-                meetingList: timeArr.map(item => ({
-                    player: '',
-                    partner: role,
-                    time: item
-                }))
+                name: role,
+                timeArr
             };
             addPartner(pushData).then(() => {
                 getInfoTable({time: [month, day]}).then(result => {
@@ -162,12 +157,25 @@ class APP extends React.Component {
                 });
             });
         } else {
-            console.log(getDateTime(data, dataSource));
+            let pushData2 = {
+                player: role,
+                month,
+                day,
+                meetingList: getDateTime(data, dataSource, role)
+            };
+
+            makeMeeting(pushData2).then(() => {
+                getInfoTable({time: [month, day]}).then(result => {
+                    this.setState({
+                        tableData: result.data
+                    });
+                });
+            });
         }
     }
 }
 
-function getDateTime(data, previousData) {
+function getDateTime(data, previousData, player) {
     if (!validateData(data)) {
         return;
     }
@@ -176,7 +184,7 @@ function getDateTime(data, previousData) {
     Object.keys(data).forEach(partner => {
         data[partner].forEach((item, index) => {
             if (item.entrepreneur && !previousData[index][partner].entrepreneur) {
-                timeArr.push({name: partner, time: previousData[index].time});
+                timeArr.push({partner, player, time: previousData[index].time});
             }
         });
     });
