@@ -138,7 +138,7 @@ class APP extends React.Component {
         const {dataSource} = this.state.tableData;
         const timeArr = [];
         const month = date.format('M');
-        const day = date.format('d');
+        const day = date.format('D');
         if (role.includes('合伙人')) {
             data[role].forEach((item, index) => {
                 if (item.other !== dataSource[index][role].isFree) {
@@ -199,6 +199,7 @@ function validateData(data) {
                 temp.push(index);
             }
         });
+        console.log(temp);
         if (temp.length > 0 && temp[temp.length] - temp[0] > temp.length) {
             notification.error({
                 message: '错误',
