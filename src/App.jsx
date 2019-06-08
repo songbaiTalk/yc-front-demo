@@ -62,7 +62,7 @@ class APP extends React.Component {
             });
         });
 
-        // 每隔15分钟刷新一下数据
+        // 每隔30s刷新一下数据
         setInterval(() => {
             const date = this.props.form.getFieldValue('date');
             getInfoTable({time: [date.format('M'), date.format('D')]}).then(result => {

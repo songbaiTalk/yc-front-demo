@@ -1,4 +1,4 @@
-# 一个简单的react项目的模板
+# 基于React的前端demo
 ## 使用方法
 ```sh
 # 下载依赖
@@ -44,15 +44,11 @@ npm run build
 ### webpack
 webpack是一款打包工具，其目的是将不同的模块整合到一个文件中，启动一个webpack的项目，首先要安装webpack模块和webpack-cli模块，并配置webpack.config.js，如果需要热更新还需要安装webpack-dev-server模块。详细用法可以参考[官方文档](https://webpack.js.org/)。
 ### babel
-babel 主要处理es6和jsx，具体怎么用我也不太清楚。一起看[官方文档](https://babeljs.io/)学习吧。
+babel 主要处理es6和jsx，[官方文档](https://babeljs.io/)。
 ### React
 React是一款前端框架，[官方文档](https://reactjs.org/)
-### react-router-dom
-React中的路由工具，[官方文档](https://reacttraining.com/react-router/web/example/basic)
+basic)
 ### Ant Design
 蚂蚁金服维护的React组件库，[官方文档](https://ant.design/)
 ### axios
 支持Promise API的网络请求工具，[官方文档](https://github.com/axios/axios)
-## 未来打算用到的技术
-### react-redux
-现在还不会，以后看看能不能有机会用到。[官方文档](https://redux.js.org/basics/usage-with-react)
