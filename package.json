@@ -1,10 +1,10 @@
 {
-  "name": "seniorClassesPC",
+  "name": "yc-front-demo",
   "version": "1.0.0",
-  "description": "学长帮后台",
+  "description": "yc前端demo",
   "main": "src/index.jsx",
   "scripts": {
-    "start": "cross-env NODE_ENV=development webpack-dev-server --open & node mockServer/index.js",
+    "start": "cross-env NODE_ENV=development webpack-dev-server --open",
     "build": "cross-env NODE_ENV=production webpack"
   },
   "keywords": [],
@@ -34,6 +34,7 @@
     "antd": "^3.13.2",
     "axios": "^0.18.0",
     "less-loader": "^4.1.0",
+    "moment": "^2.24.0",
     "react": "^16.8.1",
     "react-dom": "^16.8.1",
     "react-qr-svg": "^2.2.1",

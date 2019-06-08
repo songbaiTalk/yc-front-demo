@@ -6,7 +6,7 @@ const webpack = require('webpack');
 
 const paths = require('./paths');
 
-const proxyServer = 'http://www.51xuezhang.cn';
+const proxyServer = 'http://47.92.215.246/';
 
 module.exports = {
     mode: 'development',
@@ -38,7 +38,7 @@ module.exports = {
         historyApiFallback: true,
         // 设置代理，请求会转发到代理上
         proxy: {
-            '/xz': {
+            '/': {
                 target: proxyServer,
                 secure: false,
                 changeOrigin: true
