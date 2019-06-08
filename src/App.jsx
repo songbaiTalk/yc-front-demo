@@ -4,7 +4,7 @@
  */
 import React from 'react';
 import moment from 'moment';
-import {DatePicker, Select, Form, Row, Col, Button} from 'antd';
+import {DatePicker, Select, Form, Row, Col, Button, notification, Descriptions} from 'antd';
 
 import Table from './components/Table';
 import getInfoTable from './services/getInfoTable';
@@ -133,12 +133,13 @@ class APP extends React.Component {
     handleClick() {
         const {getFieldsValue} = this.props.form;
         const {role, date, data} = getFieldsValue();
+        const {dataSource} = this.state.tableData;
         const timeArr = [];
         const month = date.format('M');
         const day = date.format('d');
         if (role.includes('合伙人')) {
             data[role].forEach((item, index) => {
-                if (item !== dataSource[index][role].isFree) {
+                if (item.other !== dataSource[index][role].isFree) {
                     timeArr.push([month, day, dataSource[index].time]);
                 }
             });
@@ -147,17 +148,51 @@ class APP extends React.Component {
                 timeArr
             });
         } else {
-
+            console.log(getDateTime(data, dataSource));
         }
     }
 }
 
-function getDateTime(data, previousDate) {
-
+function getDateTime(data, previousData) {
+    if (!validateData(data)) {
+        return;
+    }
+    console.log(previousData);
+    const timeArr = [];
+    Object.keys(data).forEach(partner => {
+        data[partner].forEach((item, index) => {
+            if (item.entrepreneur && !previousData[index][partner].entrepreneur) {
+                timeArr.push({name: partner, time: previousData[index].time});
+            }
+        });
+    });
+    return timeArr;
 }
 
 function validateData(data) {
-    Object.keys(data).forEach()
+    return Object.keys(data).every(partner => {
+        let temp = [];
+        data[partner].forEach((item, index) => {
+            if (item.entrepreneur) {
+                temp.push(index);
+            }
+        });
+        if (temp.length > 0 && temp[temp.length] - temp[0] > temp.length) {
+            notification.error({
+                message: '错误',
+                Descriptions: '您一天内不能分两段时间和合伙人见面'
+            });
+            return false;
+        }
+        if (temp.length > 4) {
+            notification.error({
+                message: '错误',
+                Descriptions: '您预约的时间不能超过一小时!'
+            });
+            return false;
+        }
+        return true;
+    });
 }
 
 export default Form.create()(APP);

@@ -3,7 +3,7 @@
  * @author zhangluyao
  */
 import * as React from 'react';
-import {Table, Checkbox} from 'antd';
+import {Table, Checkbox, Button} from 'antd';
 
 export default props => {
     const {dataSource, columns, form} = props;
@@ -13,15 +13,12 @@ export default props => {
     const render = (text, row, index) => {
         if (text instanceof Object) {
             if (role.includes('创业者')) {
-                if (text.entrepreneur && text.entrepreneur.length > 0) {
-                    return text.entrepreneur;
-                }
                 if (text.isFree) {
                     return (
                         <span>
                             FREE
                             {
-                                getFieldDecorator(`data.${text.name}.${index}`)(
+                                getFieldDecorator(`data.${text.name}.${index}.entrepreneur`)(
                                     <Checkbox
                                         style={{marginLeft: 20}}
                                     />
@@ -33,19 +30,19 @@ export default props => {
                 if (text.entrepreneur === role) {
                     return (
                         <span>
-                            可取消
-                            {
-                                getFieldDecorator(`data.${text.name}.${index}`, {
-                                    initialValue: true
-                                })(
-                                    <Checkbox
-                                        disabled={text.entrepreneur !== role}
-                                        style={{marginLeft: 20}}
-                                    />
-                                )
-                            }
+                            已预约
+                            <Button
+                                sie="small"
+                                style={{marginLeft: 20, padding: 5}}
+                                type="primary"
+                            >
+                                取消
+                            </Button>
                         </span>
                     );
+                }
+                if (text.entrepreneur && text.entrepreneur.length > 0) {
+                    return text.entrepreneur;
                 }
             }
 
@@ -55,7 +52,7 @@ export default props => {
                     <span>
                         {text.isFree ? 'FREE' : ''}
                         {
-                            getFieldDecorator(`data.${text.name}.${index}`, {
+                            getFieldDecorator(`data.${text.name}.${index}.other`, {
                                 initialValue: text.isFree
                             })(
                                 <Checkbox
