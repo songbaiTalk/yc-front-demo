@@ -1,4 +1,0 @@
-/**
- * @file addPartner
- * @author zhangluyao
- */

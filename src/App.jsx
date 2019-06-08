@@ -4,10 +4,11 @@
  */
 import React from 'react';
 import moment from 'moment';
-import {DatePicker, Select, Form, Row, Col, Button, notification, Descriptions} from 'antd';
+import {DatePicker, Select, Form, Row, Col, Button, notification} from 'antd';
 
 import Table from './components/Table';
 import getInfoTable from './services/getInfoTable';
+import addPartner from './services/addPartner';
 
 const {Option} = Select;
 const {Item} = Form;
@@ -140,12 +141,25 @@ class APP extends React.Component {
         if (role.includes('合伙人')) {
             data[role].forEach((item, index) => {
                 if (item.other !== dataSource[index][role].isFree) {
-                    timeArr.push([month, day, dataSource[index].time]);
+                    timeArr.push(dataSource[index].time);
                 }
             });
-            console.log({
-                name: role,
-                timeArr
+            let pushData = {
+                month,
+                day,
+                player: '',
+                meetingList: timeArr.map(item => ({
+                    player: '',
+                    partner: role,
+                    time: item
+                }))
+            };
+            addPartner(pushData).then(() => {
+                getInfoTable({time: [month, day]}).then(result => {
+                    this.setState({
+                        tableData: result.data
+                    });
+                });
             });
         } else {
             console.log(getDateTime(data, dataSource));
@@ -180,14 +194,14 @@ function validateData(data) {
         if (temp.length > 0 && temp[temp.length] - temp[0] > temp.length) {
             notification.error({
                 message: '错误',
-                Descriptions: '您一天内不能分两段时间和合伙人见面'
+                description: '您一天内不能分两段时间和合伙人见面'
             });
             return false;
         }
         if (temp.length > 4) {
             notification.error({
                 message: '错误',
-                Descriptions: '您预约的时间不能超过一小时!'
+                description: '您预约的时间不能超过一小时!'
             });
             return false;
         }
