@@ -10,6 +10,7 @@ import Table from './components/Table';
 import getInfoTable from './services/getInfoTable';
 import addPartner from './services/addPartner';
 import makeMeeting from './services/makeMeeting';
+import cancelMeeting from './services/cancelMeeting';
 
 const {Option} = Select;
 const {Item} = Form;
@@ -117,6 +118,9 @@ class APP extends React.Component {
                         columns={this.state.tableData.columns}
                         dataSource={this.state.tableData.dataSource}
                         form={this.props.form}
+                        handleCancel={(row, text) => {
+                            this.handleCancel(row, text);
+                        }}
                     />
                     : null
                 }
@@ -173,6 +177,30 @@ class APP extends React.Component {
             });
         }
     }
+
+    handleCancel(row, text) {
+        const {getFieldsValue} = this.props.form;
+        const player = getFieldsValue().role;
+        const date = getFieldsValue().date;
+        const month = date.format('M');
+        const day = date.format('D');
+        const pushData = {
+            partner: text.name,
+            player,
+            time: {
+                month,
+                day,
+                time: row.time
+            }
+        };
+        cancelMeeting(pushData).then(() => {
+            getInfoTable({time: [month, day]}).then(result => {
+                this.setState({
+                    tableData: result.data
+                });
+            });
+        });
+    }
 }
 
 function getDateTime(data, previousData, player) {
@@ -200,7 +228,7 @@ function validateData(data) {
             }
         });
         console.log(temp);
-        if (temp.length > 0 && temp[temp.length] - temp[0] > temp.length) {
+        if (temp.length > 0 && temp[temp.length] - temp[0] >= temp.length) {
             notification.error({
                 message: '错误',
                 description: '您一天内不能分两段时间和合伙人见面'

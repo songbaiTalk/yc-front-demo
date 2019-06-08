@@ -35,6 +35,9 @@ export default props => {
                                 sie="small"
                                 style={{marginLeft: 20, padding: 5}}
                                 type="primary"
+                                onClick={() => {
+                                    this.props.handleCancel(row, text);
+                                }}
                             >
                                 取消
                             </Button>
