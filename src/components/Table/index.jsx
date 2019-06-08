@@ -16,14 +16,13 @@ export default props => {
                 if (text.entrepreneur && text.entrepreneur.length > 0) {
                     return text.entrepreneur;
                 }
-                if (!text.isFree) {
+                if (text.isFree) {
                     return (
                         <span>
-                            可预约
+                            FREE
                             {
                                 getFieldDecorator(`data.${text.name}.${index}`)(
                                     <Checkbox
-                                        disabled={text.name !== role}
                                         style={{marginLeft: 20}}
                                     />
                                 )
@@ -40,7 +39,7 @@ export default props => {
                                     initialValue: true
                                 })(
                                     <Checkbox
-                                        disabled={text.name !== role}
+                                        disabled={text.entrepreneur !== role}
                                         style={{marginLeft: 20}}
                                     />
                                 )
@@ -54,13 +53,13 @@ export default props => {
             if (!text.entrepreneur) {
                 return (
                     <span>
-                        {text.isFree ? 'free' : '已确认'}
+                        {text.isFree ? 'FREE' : ''}
                         {
                             getFieldDecorator(`data.${text.name}.${index}`, {
-                                initialValue: !text.isFree
+                                initialValue: text.isFree
                             })(
                                 <Checkbox
-                                    disabled={text.name !== role || !text.isFree}
+                                    disabled={text.name !== role || text.isFree}
                                     style={{marginLeft: 20}}
                                 />
                             )

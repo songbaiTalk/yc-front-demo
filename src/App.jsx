@@ -62,12 +62,12 @@ class APP extends React.Component {
         // 每隔15分钟刷新一下数据
         setInterval(() => {
             const date = this.props.form.getFieldValue('date');
-            getInfoTable({time: [date.format('M'), date.format('d')]}).then(result => {
+            getInfoTable({time: [date.format('M'), date.format('D')]}).then(result => {
                 this.setState({
                     tableData: result.data
                 });
             });
-        }, 10000);
+        }, 30000);
     }
 
     render() {
@@ -80,7 +80,7 @@ class APP extends React.Component {
                             {
                                 getFieldDecorator('date', {
                                     initialValue: moment()
-                                })(<DatePicker />)
+                                })(<DatePicker onChange={date => {this.handleDatePickerChange(date); }}/>)
                             }
                         </Item>
                     </Col>
@@ -122,6 +122,14 @@ class APP extends React.Component {
         );
     }
 
+    handleDatePickerChange(date) {
+        getInfoTable({time: [date.format('M'), date.format('D')]}).then(result => {
+            this.setState({
+                tableData: result.data
+            });
+        });
+    }
+
     handleClick() {
         const {getFieldsValue} = this.props.form;
         const {role, date, data} = getFieldsValue();
@@ -130,7 +138,7 @@ class APP extends React.Component {
         const day = date.format('d');
         if (role.includes('合伙人')) {
             data[role].forEach((item, index) => {
-                if (item === dataSource[index][role].isFree) {
+                if (item !== dataSource[index][role].isFree) {
                     timeArr.push([month, day, dataSource[index].time]);
                 }
             });
@@ -142,6 +150,14 @@ class APP extends React.Component {
 
         }
     }
+}
+
+function getDateTime(data, previousDate) {
+
+}
+
+function validateData(data) {
+    Object.keys(data).forEach()
 }
 
 export default Form.create()(APP);
